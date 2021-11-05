@@ -1,9 +1,71 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
-			"path": "pages/index/index",
+			"path": "pages/home/index",
+			"name": "Home",
+			"meta": {
+				"title": "首页"
+			},
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				"navigationBarTitleText": "首页",
+				"navigationStyle": "custom", // 隐藏系统导航栏
+				"h5": {
+					"titleNView": false
+				},
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/coupons/index",
+			"name": "Coupons",
+			"meta": {
+				"title": "券场"
+			},
+			"style": {
+				"navigationBarTitleText": "券场",
+				"navigationStyle": "custom", // 隐藏系统导航栏
+				"h5": {
+					"titleNView": false
+				},
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/discount/index",
+			"name": "Discount",
+			"meta": {
+				"title": "特惠"
+			},
+			"style": {
+				"navigationBarTitleText": "特惠",
+				"navigationStyle": "custom", // 隐藏系统导航栏
+				"h5": {
+					"titleNView": false
+				},
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		},
+		{
+			"path": "pages/my/index",
+			"name": "My",
+			"meta": {
+				"title": "我的"
+			},
+			"style": {
+				"navigationBarTitleText": "我的",
+				"navigationStyle": "custom", // 隐藏系统导航栏
+				"h5": {
+					"titleNView": false
+				},
+				"app-plus": {
+					"titleNView": false
+				}
 			}
 		}
 	],
@@ -11,6 +73,37 @@
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
+		"backgroundColor": "#ffffff"
+	},
+	"tabBar": {
+		"color": "#adadad",
+		"selectedColor": "#000000",
+		"borderStyle": "black",
+		"backgroundColor": "#ffffff",
+		"list": [{
+				"pagePath": "pages/home/index",
+				"iconPath": "static/images/home_freed.png",
+				"selectedIconPath": "static/images/home_press.png",
+				"text": "首页"
+			},
+			{
+				"pagePath": "pages/coupons/index",
+				"iconPath": "./static/images/coupons_freed.png",
+				"selectedIconPath": "static/images/coupons_press.png",
+				"text": "券场"
+			},
+			{
+				"pagePath": "pages/discount/index",
+				"iconPath": "static/images/discount_freed.png",
+				"selectedIconPath": "static/images/discount_press.png",
+				"text": "特惠"
+			},
+			{
+				"pagePath": "pages/my/index",
+				"iconPath": "static/images/my_freed.png",
+				"selectedIconPath": "static/images/my_press.png",
+				"text": "我的"
+			}
+		]
 	}
 }
