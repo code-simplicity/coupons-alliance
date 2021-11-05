@@ -47,7 +47,15 @@
             },
             "ios" : {},
             /* ios打包配置 */
-            "sdkConfigs" : {}
+            "sdkConfigs" : {
+                "ad" : {}
+            },
+            "icons" : {
+                "android" : {
+                    "hdpi" : "H:/AwebKF/领劵联盟/HatchfulExport-All/logo.png",
+                    "xxhdpi" : "H:/AwebKF/领劵联盟/HatchfulExport-All/logo.png"
+                }
+            }
         }
     },
     /* SDK配置 */
