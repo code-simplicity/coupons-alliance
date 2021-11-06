@@ -7,8 +7,11 @@ import App from './App'
 // 引入暴露的api接口
 import api from './api/index.js'
 
+import utils from './utils/utils.js'
+
 Vue.config.productionTip = false
 Vue.prototype.$api = api
+Vue.prototype.$utils = utils
 
 App.mpType = 'app'
 
