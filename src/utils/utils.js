@@ -6,6 +6,5 @@ export default {
 		}
 		let res = Number(num.toFixed(i))
 		return res;
-
 	}
 }
