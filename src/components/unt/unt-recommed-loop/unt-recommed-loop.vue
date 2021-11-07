@@ -1,6 +1,6 @@
 <template>
 	<view class="unt-recommed-loop">
-		<u-swiper :list="list" mode="dot" name="pict_url" @click="toInfoResult"></u-swiper>
+		<u-swiper :list="list" mode="dot" name="pict_url" img-mode="aspectFill" @click="toTaoBaoApp"></u-swiper>
 	</view>
 </template>
 
@@ -34,7 +34,41 @@ export default {
 		},
 
 		// 点击到具体链接
-		toInfoResult(index) {}
+		toTaoBaoApp(index) {
+			let list = this.list;
+			// #ifdef APP-PLUS
+			// 先判断设备是as还是os
+			// 首先判断淘宝是否安装
+			if (plus.os.name === 'Android') {
+				if (plus.runtime.isApplicationExist({ pname: 'com.taobao.taobao', action: 'taobao://' })) {
+					uni.showModal({
+						content: '淘宝已经安装，是否打开淘宝并跳转到对应链接',
+						success: function(res) {
+							if (res.confirm) {
+								// 打开淘宝领劵地址
+								plus.runtime.openURL(
+									'https:' + list[index].coupon_click_url,
+									function(e) {
+										console.log(e.message);
+									},
+									'com.taobao.taobao'
+								);
+							}
+						}
+					});
+				} else {
+					uni.showToast({
+						title: '未检测安装淘宝应用，请到商店下载安装',
+						icon: 'error'
+					});
+				}
+			}
+			// #endif
+
+			// #ifdef H5
+			window.location.href = list[index].coupon_click_url;
+			// #endif
+		}
 	}
 };
 </script>
