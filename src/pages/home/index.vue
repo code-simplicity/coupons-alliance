@@ -3,9 +3,15 @@
 		<u-navbar :is-back="false" title="" back-text="">
 			<view class="left"><u-icon name="scan" color="#19114c" size="48"></u-icon></view>
 			<view class="slot-wrap flex-align" slot="">
-				<u-search :show-action="false" shape="round" placeholder="输入商品名称" v-model="keyword"></u-search>
+				<u-search
+					@focus="focus"
+					:show-action="false"
+					shape="round"
+					placeholder="输入商品名称"
+					v-model="keyword"
+				></u-search>
 			</view>
-			<view class="right" slot="right"><u-icon name="car" color="#19114c" size="48"></u-icon></view>
+			<view class="right" slot="right"><u-icon name="shopping-cart" color="#19114c" size="48"></u-icon></view>
 		</u-navbar>
 		<!-- tabs -->
 		<view class="tabs flex-align">
@@ -34,63 +40,63 @@
 				@animationfinish="animationfinish"
 			>
 				<swiper-item>
-					<scroll-view scroll-y="true" style="height: 100%;">
+					<scroll-view scroll-y="true" style="height: 100%;" @scrolltolower="onreachBottom">
 						<unt-recommed-loop></unt-recommed-loop>
 						<unt-recommed-list ref="productList0"></unt-recommed-list>
 					</scroll-view>
 				</swiper-item>
 				<swiper-item>
-					<scroll-view scroll-y="true" style="height: 100%;">
+					<scroll-view scroll-y="true" style="height: 100%;" @scrolltolower="onreachBottom">
 						<unt-recommed-list ref="productList1"></unt-recommed-list>
 					</scroll-view>
 				</swiper-item>
 				<swiper-item>
-					<scroll-view scroll-y="true" style="height: 100%;">
+					<scroll-view scroll-y="true" style="height: 100%;" @scrolltolower="onreachBottom">
 						<unt-recommed-list ref="productList2"></unt-recommed-list>
 					</scroll-view>
 				</swiper-item>
 				<swiper-item>
-					<scroll-view scroll-y="true" style="height: 100%;">
+					<scroll-view scroll-y="true" style="height: 100%;" @scrolltolower="onreachBottom">
 						<unt-recommed-list ref="productList3"></unt-recommed-list>
 					</scroll-view>
 				</swiper-item>
 				<swiper-item>
-					<scroll-view scroll-y="true" style="height: 100%;">
+					<scroll-view scroll-y="true" style="height: 100%;" @scrolltolower="onreachBottom">
 						<unt-recommed-list ref="productList4"></unt-recommed-list>
 					</scroll-view>
 				</swiper-item>
 				<swiper-item>
-					<scroll-view scroll-y="true" style="height: 100%;">
+					<scroll-view scroll-y="true" style="height: 100%;" @scrolltolower="onreachBottom">
 						<unt-recommed-list ref="productList5"></unt-recommed-list>
 					</scroll-view>
 				</swiper-item>
 				<swiper-item>
-					<scroll-view scroll-y="true" style="height: 100%;">
+					<scroll-view scroll-y="true" style="height: 100%;" @scrolltolower="onreachBottom">
 						<unt-recommed-list ref="productList6"></unt-recommed-list>
 					</scroll-view>
 				</swiper-item>
 				<swiper-item>
-					<scroll-view scroll-y="true" style="height: 100%;">
+					<scroll-view scroll-y="true" style="height: 100%;" @scrolltolower="onreachBottom">
 						<unt-recommed-list ref="productList7"></unt-recommed-list>
 					</scroll-view>
 				</swiper-item>
 				<swiper-item>
-					<scroll-view scroll-y="true" style="height: 100%;">
+					<scroll-view scroll-y="true" style="height: 100%;" @scrolltolower="onreachBottom">
 						<unt-recommed-list ref="productList8"></unt-recommed-list>
 					</scroll-view>
 				</swiper-item>
 				<swiper-item>
-					<scroll-view scroll-y="true" style="height: 100%;">
+					<scroll-view scroll-y="true" style="height: 100%;" @scrolltolower="onreachBottom">
 						<unt-recommed-list ref="productList9"></unt-recommed-list>
 					</scroll-view>
 				</swiper-item>
 				<swiper-item>
-					<scroll-view scroll-y="true" style="height: 100%;">
+					<scroll-view scroll-y="true" style="height: 100%;" @scrolltolower="onreachBottom">
 						<unt-recommed-list ref="productList10"></unt-recommed-list>
 					</scroll-view>
 				</swiper-item>
 				<swiper-item>
-					<scroll-view scroll-y="true" style="height: 100%;">
+					<scroll-view scroll-y="true" style="height: 100%;" @scrolltolower="onreachBottom">
 						<unt-recommed-list ref="productList11"></unt-recommed-list>
 					</scroll-view>
 				</swiper-item>
@@ -162,7 +168,9 @@ export default {
 			current: 0,
 			// 屏幕高度
 			screenHeight: 0,
-			swiperCurrent: 0
+			swiperCurrent: 0,
+			// 页码
+			page: 1
 		};
 	},
 	onReady() {
@@ -174,68 +182,68 @@ export default {
 	},
 	component: {},
 	mounted() {
-		this.changeTabs(this.list, this.current);
+		this.changeTabs(this.list, this.current, this.page);
 		// this.getDiscoveryCategories();
 	},
 	methods: {
-		// 获取分类
-		// async getDiscoveryCategories() {
-		// 	let res = await this.$api.getDiscoveryCategories();
-		// 	if (res.code === 10000) {
-		// 		this.list = res.data;
-		// 		this.changeTabs(this.list, this.current);
-		// 	}
-		// },
+		// 获取焦点跳转搜索页
+		focus(val) {
+			uni.navigateTo({
+				url: '../search/index',
+				animationType: 'pop-in',
+				animationDuration: 200
+			});
+		},
 
 		// 切换tabs，传递materialId
-		changeTabs(list, index) {
+		changeTabs(list, index, page) {
 			switch (index) {
 				case 0: {
-					this.$refs.productList0.getDiscoveryMaterial(list[index].id);
+					this.$refs.productList0.getDiscoveryMaterial(list[index].id, page);
 					break;
 				}
 				case 1: {
-					this.$refs.productList1.getDiscoveryMaterial(list[index].id);
+					this.$refs.productList1.getDiscoveryMaterial(list[index].id, page);
 					break;
 				}
 				case 2: {
-					this.$refs.productList2.getDiscoveryMaterial(list[index].id);
+					this.$refs.productList2.getDiscoveryMaterial(list[index].id, page);
 					break;
 				}
 				case 3: {
-					this.$refs.productList3.getDiscoveryMaterial(list[index].id);
+					this.$refs.productList3.getDiscoveryMaterial(list[index].id, page);
 					break;
 				}
 				case 4: {
-					this.$refs.productList4.getDiscoveryMaterial(list[index].id);
+					this.$refs.productList4.getDiscoveryMaterial(list[index].id, page);
 					break;
 				}
 				case 5: {
-					this.$refs.productList5.getDiscoveryMaterial(list[index].id);
+					this.$refs.productList5.getDiscoveryMaterial(list[index].id, page);
 					break;
 				}
 				case 6: {
-					this.$refs.productList6.getDiscoveryMaterial(list[index].id);
+					this.$refs.productList6.getDiscoveryMaterial(list[index].id, page);
 					break;
 				}
 				case 7: {
-					this.$refs.productList7.getDiscoveryMaterial(list[index].id);
+					this.$refs.productList7.getDiscoveryMaterial(list[index].id, page);
 					break;
 				}
 				case 8: {
-					this.$refs.productList8.getDiscoveryMaterial(list[index].id);
+					this.$refs.productList8.getDiscoveryMaterial(list[index].id, page);
 					break;
 				}
 				case 9: {
-					this.$refs.productList9.getDiscoveryMaterial(list[index].id);
+					this.$refs.productList9.getDiscoveryMaterial(list[index].id, page);
 					break;
 				}
 				case 10: {
-					this.$refs.productList10.getDiscoveryMaterial(list[index].id);
+					this.$refs.productList10.getDiscoveryMaterial(list[index].id, page);
 					break;
 				}
 				case 11: {
-					this.$refs.productList11.getDiscoveryMaterial(list[index].id);
+					this.$refs.productList11.getDiscoveryMaterial(list[index].id, page);
 					break;
 				}
 			}
@@ -243,9 +251,8 @@ export default {
 
 		// 点击切换tabs
 		change(index) {
-			this.current = index;
 			this.swiperCurrent = index;
-			this.changeTabs(this.list, index);
+			this.changeTabs(this.list, index, this.page);
 		},
 
 		// swiper-item左右移动，通知tabs的滑块跟随移动
@@ -261,9 +268,17 @@ export default {
 			this.$refs.uTabs.setFinishCurrent(current);
 			this.swiperCurrent = current;
 			if (this.current !== current) {
-				this.changeTabs(this.list, current);
+				this.changeTabs(this.list, current, this.page);
 			}
 			this.current = current;
+		},
+
+		// 触发底部更新
+		onreachBottom() {
+			setTimeout(() => {
+				this.page = ++this.page;
+				this.changeTabs(this.list, this.swiperCurrent, this.page);
+			}, 1000);
 		}
 	}
 };
@@ -300,8 +315,9 @@ export default {
 		}
 	}
 	.list-wrap {
+		margin-top: 80rpx;
+		position: relative;
 		.swiper {
-			margin-top: 90rpx;
 		}
 	}
 }
