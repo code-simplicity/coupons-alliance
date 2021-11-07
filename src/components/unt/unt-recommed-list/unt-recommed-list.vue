@@ -1,9 +1,20 @@
 <template>
-	<view class="unt-recommed-list">
+	<view class="unt-recommed-list u-skeleton">
 		<view class="list-wrap flex-layout">
-			<view class="list-content" v-for="(item, index) in productList" :key="index">
+			<view
+				class="list-content"
+				v-for="(item, index) in productList"
+				:key="index"
+				@click="toTaoBaoApp(item.coupon_click_url)"
+			>
 				<view class="list-top">
-					<u-image border-radius="16" width="100%" height="360rpx" :src="item.pict_url"></u-image>
+					<u-image
+						border-radius="16"
+						width="100%"
+						height="360rpx"
+						mode="aspectFit"
+						:src="item.pict_url"
+					></u-image>
 				</view>
 				<view class="list-bottom">
 					<view class="list-title u-line-2">{{ item.title }}</view>
@@ -20,6 +31,7 @@
 				</view>
 			</view>
 		</view>
+		<u-loadmore marginTop="20" icon-color="#ff0000" :status="status" :icon-type="iconType" :load-text="loadText" />
 	</view>
 </template>
 
@@ -34,10 +46,16 @@ export default {
 	name: 'unt-recommed-list',
 	data() {
 		return {
-			// 页码
-			page: 1,
 			// 商品列表
-			productList: []
+			productList: [],
+			// 正在加载中
+			status: 'loading',
+			iconType: 'flower',
+			loadText: {
+				loadmore: '轻轻上拉',
+				loading: '努力加载中',
+				nomore: '实在没有了'
+			}
 		};
 	},
 
@@ -46,12 +64,50 @@ export default {
 	component: {},
 	mounted() {},
 	methods: {
-		// 获取
-		async getDiscoveryMaterial(materialId) {
+		// 跳转到领劵页面
+		toTaoBaoApp(url) {
+			// #ifdef APP-PLUS
+			// 先判断设备是as还是os
+			// 首先判断淘宝是否安装
+			if (plus.os.name === 'Android') {
+				if (plus.runtime.isApplicationExist({ pname: 'com.taobao.taobao', action: 'taobao://' })) {
+					uni.showModal({
+						content: '淘宝已经安装，是否打开淘宝并跳转到对应链接',
+						success: function(res) {
+							if (res.confirm) {
+								// 打开淘宝领劵地址
+								plus.runtime.openURL(
+									'https:' + url,
+									function(e) {
+										console.log(e.message);
+									},
+									'com.taobao.taobao'
+								);
+							}
+						}
+					});
+				} else {
+					uni.showToast({
+						title: '未检测安装淘宝应用，请到商店下载安装',
+						icon: 'error'
+					});
+				}
+			}
+			// #endif
+
+			// #ifdef H5
+			window.location.href = url;
+			// #endif
+		},
+
+		// 获取根据发现页分类id获取分类内容
+		async getDiscoveryMaterial(materialId, page) {
 			// 获取分类id，组装页数
-			let res = await this.$api.getDiscoveryMaterial(materialId, this.page);
+			this.status = 'loading';
+			let res = await this.$api.getDiscoveryMaterial(materialId, page);
 			if (res.code === 10000) {
-				this.productList = res.data;
+				this.productList = this.productList.concat(res.data);
+				this.status = 'nomore';
 			}
 		}
 	}
