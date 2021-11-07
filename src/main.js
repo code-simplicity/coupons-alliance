@@ -9,6 +9,9 @@ import api from './api/index.js'
 
 import utils from './utils/utils.js'
 
+// 使用vuex
+import store from './store/index.js'
+
 Vue.config.productionTip = false
 Vue.prototype.$api = api
 Vue.prototype.$utils = utils
@@ -16,6 +19,7 @@ Vue.prototype.$utils = utils
 App.mpType = 'app'
 
 const app = new Vue({
+	store,
 	...App
 })
 
